@@ -1,0 +1,25 @@
+import clr
+clr.AddReference('ProtoGeometry')
+from Autodesk.DesignScript.Geometry import Vector
+
+random_points = IN[0]
+origin = IN[1]
+
+sorted_pi = []
+final_pt = []
+
+for pt in random_points:
+	vector = Vector.ByTwoPoints(origin, pt)
+	length = vector.Length
+	sorted_pi.append([length, pt])
+
+#	OUT = dir(pt) sprawdza jakie sa mozliwe metody
+#	OUT = pt.ByCoordinates.__doc__  drukuje infomacje na temat funkcji
+
+
+for group in sorted(sorted_pi):
+	pt = group[1] # wybiera z listy wartosc x,y,z
+	final_pt.append(pt) # do listy final... dodaje pt(punkty)
+
+OUT = final_pt
+	
