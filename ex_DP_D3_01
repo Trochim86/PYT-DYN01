@@ -1,0 +1,75 @@
+#! python3
+#Skrypt wyszukuje pliki na wskazanej lokalizacji, drukuje adres oraz rozmiar pliku
+
+import os, sendgrid
+
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+
+
+def ByteToMegabytes(SizeInBytes):
+
+    SizeInMegabytes = SizeInBytes / (1024 * 1024)
+    return round(SizeInMegabytes, 2)
+    '''
+    Konwertuje bytes na megabytes
+    '''
+def FindLargeFile(path):  
+    '''
+    Find large file that 5mb
+    '''
+    LargeFile =[]  
+    for root, dirs, files in os.walk(path): # Wprowadzamy sciezke bezwzgledna bez znaczenia D:, C:
+        for file in files:
+        #if file.endswith('.txt'):
+        
+            filepath = os.path.join(root, file) # os.path.join dodaje do wyszukiwanej sciezki caly adres (link)
+        
+
+            FileStat = os.stat(filepath) # os.stat pobiera informacje o pliku
+            FileSize = FileStat.st_size  # .st_size funkcja podaje rozmiar pliku
+            FileSizeInMb = ByteToMegabytes(FileSize)
+
+            if FileSizeInMb < 5:
+                continue
+
+            LargeFile = {'filepath:.': filepath, 'Size:.': FileSizeInMb }
+            LargeFile.append(LargeFile)
+            #print(f"File:. {filepath} Size:. {FilrSizeInMb} MB")
+    return LargeFile
+
+
+
+APIKEY='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'
+
+def SendEmail(content):
+
+    
+
+    message = Mail(
+        from_email='from_email@example.com',
+        to_emails='Trochimiak86@gmail.com',
+        subject='Sending with Twilio SendGrid is Fun',
+        html_content= content)
+    try:
+        sg = SendGridAPIClient(APIKEY)
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
+
+# Send Email
+path = "'D:\\Dane\\Nauka\\Python'"
+
+LargeFile = FindLargeFile(path)
+FindLargeFileText = str(LargeFile)
+SendEmail(FindLargeFileText)
+#LargeFile = FindLargeFile() 
+
+
+
+
+#print(LargeFile)      
