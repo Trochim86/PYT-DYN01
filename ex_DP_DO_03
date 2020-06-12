@@ -1,0 +1,16 @@
+
+import re
+
+sheets = IN[0]
+
+patern = '\D-\d-\d{4}'
+
+bad_names = []
+
+for sheet in sheets:
+	if re.search(patern, sheet.SheetNumber):
+		pass
+	else:
+		bad_names.append(sheet)
+	
+OUT = bad_names
